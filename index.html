@@ -2,41 +2,89 @@
 <html>
 <head>
   <title>Napak Tilas Sukarno</title>
+  <!-- Impor Font Poppins dari Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
   <style>
-    /* Atur ukuran peta */
+    /* Reset dasar dan terapkan font global */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden; /* Mencegah scroll pada body */
+    }
+
+    /* Styling untuk Header */
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      height: 80px; /* Tinggi header yang tetap */
+      box-sizing: border-box;
+    }
+    .header img {
+      height: 60px; /* Sesuaikan ukuran logo */
+      margin-right: 20px;
+    }
+    .header-text h3 {
+      margin: 0;
+      font-size: 1.2em;
+      font-weight: 700;
+    }
+    .header-text p {
+      margin: 0;
+      font-size: 0.9em;
+    }
+    
+    /* Atur ukuran peta agar mengisi sisa viewport */
     #map {
-      height: 100vh;
+      height: calc(100vh - 80px); /* Tinggi viewport dikurangi tinggi header */
       width: 100%;
     }
+    
     /* Styling untuk InfoWindow */
     .gm-style-iw-d {
-        overflow: auto !important; /* Izinkan scroll jika konten panjang */
+      overflow: auto !important;
     }
     .gm-style-iw-c {
-        padding: 12px !important;
-        max-width: 350px !important; /* Batasi lebar maksimum InfoWindow */
-        min-width: 250px !important; /* Atur lebar minimum */
+      padding: 12px !important;
+      max-width: 350px !important;
+      min-width: 250px !important;
+      /* Pastikan font di dalam InfoWindow juga Poppins */
+      font-family: 'Poppins', sans-serif !important;
     }
     .info-window-content h4 {
-        margin: 0 0 8px 0;
-        font-size: 16px;
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      font-weight: 700;
     }
     .info-window-content p {
-        margin: 0 0 5px 0;
-        line-height: 1.4;
-        white-space: normal; /* Pastikan teks deskripsi bisa wrap */
+      margin: 0 0 5px 0;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: normal;
     }
   </style>
 </head>
 <body>
-  <h3>Napak Tilas Sukarno 10 Agustus 2025 - Bandung</h3>
-  <p>Memperingati 95 Tahun Indonesia Menggugat Menuju Indonesia Merdeka</p>
+  
+  <!-- Header dengan Logo dan Judul -->
+  <div class="header">
+    <img src="images/kpa.jpg" alt="Logo KPA">
+    <div class="header-text">
+      <h3>Napak Tilas Sukarno 10 Agustus 2025 - Bandung</h3>
+      <p>Memperingati 95 Tahun Indonesia Menggugat Menuju Indonesia Merdeka</p>
+    </div>
+  </div>
   
   <!-- Elemen div untuk menampilkan peta -->
   <div id="map"></div>
 
   <script>
-    // Data GeoJSON Anda dengan penambahan properti "description"
+    // Data GeoJSON Anda (tidak ada perubahan pada data ini)
     const geojsonData = {
       "type": "FeatureCollection",
       "features": [{
@@ -121,16 +169,19 @@
       
       // Atur style peta
       map.data.setStyle(feature => {
-        let color = '#FF0000'; // Warna default untuk rute
-        if (feature.getProperty('name').includes('Etape 1')) { color = '#4285F4'; }
-        if (feature.getProperty('name').includes('Etape 2')) { color = '#34A853'; }
-        if (feature.getProperty('name').includes('Etape 3')) { color = '#FBBC05'; }
-        if (feature.getProperty('name').includes('Etape 4')) { color = '#EA4335'; }
+        let color = '#FF0000'; // Warna default
+        if (feature.geometry.type === 'LineString') {
+          if (feature.getProperty('name').includes('Etape 1')) { color = '#4285F4'; }
+          else if (feature.getProperty('name').includes('Etape 2')) { color = '#34A853'; }
+          else if (feature.getProperty('name').includes('Etape 3')) { color = '#FBBC05'; }
+          else if (feature.getProperty('name').includes('Etape 4')) { color = '#EA4335'; }
+        }
         
         return {
           strokeColor: color,
           strokeWeight: 5,
-          strokeOpacity: 0.9
+          strokeOpacity: 0.9,
+          // Ikon tidak diubah, tetap default
         };
       });
 
@@ -145,7 +196,7 @@
         if (name) {
             contentString += '<h4>' + name + '</h4>';
             if (length) {
-                contentString += '<p>Perkiraan Jarak Tempuh: <b>' + length + ' km</b></p>';
+                contentString += '<p>Perkiraan Jarak: <b>' + length + ' km</b></p>';
             }
             if (description) {
                 contentString += '<p>' + description + '</p>';
