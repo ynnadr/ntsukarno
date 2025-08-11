@@ -9,8 +9,10 @@
 
   <style>
     /* Reset dasar dan terapkan font global */
-    body {
+    body, html {
       margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: 'Poppins', sans-serif;
       overflow: hidden; /* Mencegah scroll pada body */
     }
@@ -53,7 +55,6 @@
       padding: 12px !important;
       max-width: 350px !important;
       min-width: 250px !important;
-      /* Pastikan font di dalam InfoWindow juga Poppins */
       font-family: 'Poppins', sans-serif !important;
     }
     .info-window-content h4 {
@@ -84,7 +85,7 @@
   <div id="map"></div>
 
   <script>
-    // Data GeoJSON Anda (tidak ada perubahan pada data ini)
+    // Data GeoJSON Anda
     const geojsonData = {
       "type": "FeatureCollection",
       "features": [{
@@ -141,7 +142,7 @@
             "name": "Penjara Sukamiskin",
             "description": "Setelah divonis 4 tahun, mulai 9 Desember 1930 Soekarno ditahan di kamar TA 01 Penjara Sukamiskin. Ia mendapatkan remisi dan dibebaskan pada 31 Desember 1931."
         },
-        "geometry": { "type": "Point", "coordinates": [107.67545660392301, -6.906005648813675] }
+        "geometry": { "type": "Point", "coordinates": [107.6653, -6.9146] }
       }]
     };
 
@@ -150,8 +151,7 @@
     function initMap() {
       // Inisialisasi peta
       map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: -6.917464, lng: 107.619123 },
-        zoom: 13,
+        center: { lat: -6.917464, lng: 107.63, zoom: 13,
       });
       
       // Hitung panjang untuk setiap LineString
@@ -177,12 +177,11 @@
           else if (feature.getProperty('name').includes('Etape 4')) { color = '#EA4335'; }
         }
         
-        return {
+        return ({
           strokeColor: color,
           strokeWeight: 5,
-          strokeOpacity: 0.9,
-          // Ikon tidak diubah, tetap default
-        };
+          strokeOpacity: 0.9
+        });
       });
 
       // Tambahkan InfoWindow
@@ -218,7 +217,8 @@
   </script>
 
   <!-- Muat Google Maps API dan sertakan Geometry Library -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8EH9giCKPsokRtXEgsqrf38MbfOMGo50&libraries=geometry&callback=initMap">
+  <!-- PENTING: Ganti MASUKKAN_API_KEY_ANDA_DISINI dengan kunci API Anda yang valid -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=MASUKKAN_API_KEY_ANDA_DISINI&libraries=geometry&callback=initMap">
   </script>
 </body>
 </html>
